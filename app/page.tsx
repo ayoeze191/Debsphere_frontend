@@ -20,7 +20,7 @@ export default function Home() {
             className="text-2xl font-light tracking-tight"
             style={{ color: LogoColor }}
           >
-            Debsphere <span className="font-medium">Academy</span>
+            {/* Debsphere <span className="font-medium">Academy</span> */}
           </span>
         </div>
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-600">
