@@ -1,53 +1,15 @@
 // app/page.tsx (Landing Page)
-import Link from "next/link";
-import { Mail, Send, Users, Sparkles, ArrowRight } from "lucide-react";
 
-const LogoColor = "#6C3CE1";
+import { Mail, Send, Users, Sparkles, ArrowRight } from "lucide-react";
+import { FaYoutube, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
+import Header from "./components/Header";
+const LogoColor = "#052073";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="max-w-6xl mx-auto px-6 py-6 flex justify-between items-center">
-        <div className="flex items-center gap-3">
-          <div
-            className="w-10 h-10 rounded-xl flex items-center justify-center"
-            style={{ background: LogoColor }}
-          >
-            <span className="text-white font-bold text-xl">D</span>
-          </div>
-          <span
-            className="text-2xl font-light tracking-tight"
-            style={{ color: LogoColor }}
-          >
-            {/* Debsphere <span className="font-medium">Academy</span> */}
-          </span>
-        </div>
-        <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-600">
-          <Link href="/" className="hover:text-[#6C3CE1] transition-colors">
-            Home
-          </Link>
-          <Link
-            href="/about"
-            className="hover:text-[#6C3CE1] transition-colors"
-          >
-            About
-          </Link>
-          <Link
-            href="/courses"
-            className="hover:text-[#6C3CE1] transition-colors"
-          >
-            Courses
-          </Link>
-          <Link
-            href="#contact"
-            className="hover:text-[#6C3CE1] transition-colors"
-          >
-            Contact
-          </Link>
-        </nav>
-      </header>
-
+      <Header />
       {/* Hero */}
       <section className="max-w-6xl mx-auto px-6 py-16 md:py-24 text-center">
         <div
@@ -113,18 +75,30 @@ export default function Home() {
 
         {/* Social Links */}
         <div className="mt-16 flex items-center justify-center gap-6">
-          {/* <a href="#" className="p-2.5 rounded-full border border-gray-200 text-gray-500 hover:text-[#6C3CE1] hover:border-[#6C3CE1]/40 transition-all duration-200">
-            <Instagram size={22} strokeWidth={1.5} />
+          <a
+            href="https://www.instagram.com/debsphere_academy?igsh=YnFrejRibnFhN2o0"
+            className="p-2.5 rounded-full border border-[#052073] text-gray-500 hover:text-[#6C3CE1] hover:border-[#6C3CE1]/40 transition-all duration-200"
+          >
+            <FaInstagram size={22} strokeWidth={1.5} color={LogoColor} />
           </a>
-          <a href="#" className="p-2.5 rounded-full border border-gray-200 text-gray-500 hover:text-[#6C3CE1] hover:border-[#6C3CE1]/40 transition-all duration-200">
-            <Twitter size={22} strokeWidth={1.5} />
+          <a
+            href="#"
+            className="p-2.5 rounded-full border border-[#052073] text-gray-500 hover:text-[#6C3CE1] hover:border-[#6C3CE1]/40 transition-all duration-200"
+          >
+            <FaTwitter size={22} strokeWidth={1.5} color={LogoColor} />
           </a>
-          <a href="#" className="p-2.5 rounded-full border border-gray-200 text-gray-500 hover:text-[#6C3CE1] hover:border-[#6C3CE1]/40 transition-all duration-200">
-            <Youtube size={22} strokeWidth={1.5} />
+          <a
+            href="#"
+            className="p-2.5 rounded-full border border-[#052073] text-gray-500 hover:text-[#6C3CE1] hover:border-[#6C3CE1]/40 transition-all duration-200"
+          >
+            <FaYoutube size={22} strokeWidth={1.5} color={LogoColor} />
           </a>
-          <a href="#" className="p-2.5 rounded-full border border-gray-200 text-gray-500 hover:text-[#6C3CE1] hover:border-[#6C3CE1]/40 transition-all duration-200">
-            <Linkedin size={22} strokeWidth={1.5} />
-          </a> */}
+          <a
+            href="#"
+            className="p-2.5 rounded-full border border-[#052073] text-gray-500 hover:text-[#6C3CE1] hover:border-[#6C3CE1]/40 transition-all duration-200"
+          >
+            <FaLinkedin size={22} strokeWidth={1.5} color={LogoColor} />
+          </a>
         </div>
       </section>
 

@@ -12,52 +12,11 @@ import {
   CheckCircle,
 } from "lucide-react";
 
-const LogoColor = "#6C3CE1";
+const LogoColor = "#052073";
 
 export default function Courses() {
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="max-w-6xl mx-auto px-6 py-6 flex justify-between items-center">
-        <div className="flex items-center gap-3">
-          <div
-            className="w-10 h-10 rounded-xl flex items-center justify-center"
-            style={{ background: LogoColor }}
-          >
-            <span className="text-white font-bold text-xl">D</span>
-          </div>
-          <span
-            className="text-2xl font-light tracking-tight"
-            style={{ color: LogoColor }}
-          >
-            Debsphere <span className="font-medium">Academy</span>
-          </span>
-        </div>
-        <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-600">
-          <Link href="/" className="hover:text-[#6C3CE1] transition-colors">
-            Home
-          </Link>
-          <Link
-            href="/about"
-            className="hover:text-[#6C3CE1] transition-colors"
-          >
-            About
-          </Link>
-          <Link
-            href="/courses"
-            className="hover:text-[#6C3CE1] transition-colors"
-          >
-            Courses
-          </Link>
-          <Link
-            href="#contact"
-            className="hover:text-[#6C3CE1] transition-colors"
-          >
-            Contact
-          </Link>
-        </nav>
-      </header>
-
       {/* Courses Hero */}
       <section className="max-w-6xl mx-auto px-6 py-12 md:py-20">
         <div className="max-w-3xl">
