@@ -15,13 +15,13 @@ export default function Home() {
         .serif { font-family: 'Fraunces', serif; }
         .mono { font-family: 'IBM Plex Mono', monospace; }
         .sans { font-family: 'IBM Plex Sans', sans-serif; }
-        // .grid-bg {
-        //   background-image:
-        //     linear-gradient(var(--rule) 1px, transparent 1px),
-        //     linear-gradient(90deg, var(--rule) 1px, transparent 1px);
-        //   background-size: 56px 56px;
-
-        // }
+        .grid-bg {
+          background-image:
+            linear-gradient(var(--rule) 1px, transparent 1px),
+            linear-gradient(90deg, var(--rule) 1px, transparent 1px);
+          background-size: 56px 56px;
+          
+        }
         .waitlist-input:focus {
           outline: none;
           border-color: var(--green) !important;
@@ -70,7 +70,7 @@ export default function Home() {
               style={{ color: "#6B7688" }}
             >
               <span className="flex items-center gap-2">
-                <Users size={15} style={{ color: "var(--green)" }} /> 500+
+                <Users size={15} style={{ color: "var(--green)" }} /> 0+
                 WAITLIST
               </span>
               <span className="hidden sm:inline">·</span>
@@ -84,9 +84,9 @@ export default function Home() {
                 EXPERT-LED
               </span>
             </div>
-
-            <WaitlistForm />
-
+            <div className="z-50  " style={{ background: "var(--paper)" }}>
+              <WaitlistForm />
+            </div>
             {/* Social Links */}
             <div className="mt-16 flex items-center justify-center gap-3">
               {[
