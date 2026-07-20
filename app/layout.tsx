@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "Debsphere Academy",
   description:
     "Bridging the gap between classroom learning and industry experience.",
+  icons: "/Debsphere_Logo.svg",
 };
 
 export default function RootLayout({
