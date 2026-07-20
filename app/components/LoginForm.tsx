@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRouter, useSearchParams } from "next/navigation";
+import authService from "./../../services/auth";
+import { useAuthStore } from "@/store/auth";
 import {
   Card,
   CardContent,
@@ -22,6 +24,7 @@ import { Separator } from "@/components/ui/separator";
 const LogoColor = "#052073";
 
 export default function LoginPage() {
+  const authStore = useAuthStore();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
@@ -31,10 +34,16 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate login
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsLoading(false);
-    // Redirect logic here
+    try {
+      const data = await authService.login(email, password);
+      authStore.setUser(data.data.user);
+      authStore.setToken(data.data.token);
+      router.push("/");
+    } catch {
+      // The form stays visible so the user can correct their credentials.
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -42,9 +51,8 @@ export default function LoginPage() {
 
     if (token) {
       localStorage.setItem("token", token);
-      //   sign user in
     }
-  }, []);
+  }, [params]);
   const handleGoogleLogin = () => {
     window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/google`;
   };
@@ -188,7 +196,7 @@ export default function LoginPage() {
 
           <CardFooter className="flex flex-col space-y-4 border-t border-gray-100 pt-6">
             <p className="text-sm text-gray-500">
-              Don't have an account?{" "}
+              Don&apos;t have an account?{" "}
               <Link
                 href="/signup"
                 className="text-[#6C3CE1] font-medium hover:text-[#5a2fb8] transition-colors hover:underline"

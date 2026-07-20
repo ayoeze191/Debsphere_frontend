@@ -1,111 +1,124 @@
-// app/page.tsx (Landing Page)
-
-import { Mail, Send, Users, Sparkles, ArrowRight } from "lucide-react";
-import { FaYoutube, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
-import Header from "./components/Header";
-const LogoColor = "#052073";
-
+import { Mail, Users, Sparkles } from "lucide-react";
+import { FaInstagram, FaTwitter, FaYoutube, FaLinkedin } from "react-icons/fa";
+import CellTag from "./components/CellTag";
+import WaitlistForm from "./components/WaitlistForm";
+import { Toaster } from "sonner";
 export default function Home() {
   return (
-    <div className="min-h-screen bg-white">
-      {/* Header */}
-      <Header />
-      {/* Hero */}
-      <section className="max-w-6xl mx-auto px-6 py-16 md:py-24 text-center">
-        <div
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border mb-6"
-          style={{ borderColor: `${LogoColor}30`, color: LogoColor }}
+    <div
+      style={{ background: "var(--paper)", color: "var(--ink)" }}
+      className="min-h-screen"
+    >
+      <Toaster />
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+        .serif { font-family: 'Fraunces', serif; }
+        .mono { font-family: 'IBM Plex Mono', monospace; }
+        .sans { font-family: 'IBM Plex Sans', sans-serif; }
+        // .grid-bg {
+        //   background-image:
+        //     linear-gradient(var(--rule) 1px, transparent 1px),
+        //     linear-gradient(90deg, var(--rule) 1px, transparent 1px);
+        //   background-size: 56px 56px;
+
+        // }
+        .waitlist-input:focus {
+          outline: none;
+          border-color: var(--green) !important;
+        }
+        .social-cell:hover {
+          background: var(--green-tint);
+          border-color: var(--green) !important;
+        }
+      `}</style>
+
+      <div className="sans">
+        {/* Hero */}
+        <section
+          className="relative overflow-hidden border-b"
+          style={{ borderColor: "var(--rule)" }}
         >
-          <Sparkles size={16} strokeWidth={1.5} />
-          <span className="text-xs font-medium tracking-wide">
-            Data Science &amp; Business Academy
-          </span>
-        </div>
-        <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.1] text-gray-900">
-          Coming <span style={{ color: LogoColor }}>Soon.</span>
-        </h1>
-        <p className="mt-6 text-lg md:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-          Debsphere Academy bridges the gap between classroom learning and
-          industry experience. Equipping you with practical, industry-relevant
-          skills for the global workforce.
-        </p>
-        <div className="mt-8 flex flex-wrap justify-center gap-8 text-sm text-gray-500">
-          <div className="flex items-center gap-2">
-            <Users size={18} className="text-[#6C3CE1]" />
-            <span>500+ waitlist</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Mail size={18} className="text-[#6C3CE1]" />
-            <span>Weekly insights</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Sparkles size={18} className="text-[#6C3CE1]" />
-            <span>Expert-led</span>
-          </div>
-        </div>
-
-        {/* Waitlist Form */}
-        <div className="w-full max-w-xl mx-auto mt-12">
-          <form className="flex flex-col sm:flex-row gap-3 w-full">
-            <div className="relative flex-1">
-              <Mail
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-                size={18}
-              />
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="w-full pl-12 pr-4 py-3.5 rounded-xl border border-gray-200 bg-white/80 focus:outline-none focus:ring-2 transition-shadow text-gray-800"
-                style={{ borderColor: `${LogoColor}40` }}
-              />
+          <div className="absolute inset-0 grid-bg opacity-60 pointer-events-none" />
+          <div className="max-w-6xl mx-auto px-6 py-20 md:py-28 relative text-center">
+            <div className="flex items-center justify-center gap-3 mb-8">
+              <CellTag>STATUS · PRE-LAUNCH</CellTag>
+              <span
+                className="mono text-[11px] tracking-widest uppercase"
+                style={{ color: "var(--green)" }}
+              >
+                Data Science &amp; Business Academy
+              </span>
             </div>
-            <button
-              type="submit"
-              className="px-8 py-3.5 rounded-xl text-white font-medium flex items-center justify-center gap-2 transition-all hover:shadow-lg active:scale-[0.98]"
-              style={{ backgroundColor: LogoColor }}
+
+            <h1 className="serif text-6xl md:text-8xl font-semibold leading-[1.02]">
+              Coming
+              <br />
+              <span style={{ color: "var(--green)" }}>Soon.</span>
+            </h1>
+
+            <p
+              className="mt-6 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed"
+              style={{ color: "#4B5768" }}
             >
-              <span>Join Waitlist</span>
-              <Send size={18} strokeWidth={1.5} />
-            </button>
-          </form>
-          <p className="text-xs text-gray-400 mt-4">
-            No spam, only data-driven updates. Unsubscribe anytime.
-          </p>
-        </div>
+              Debsphere Academy bridges the gap between classroom learning and
+              industry experience, equipping you with practical,
+              industry-relevant skills for the global workforce.
+            </p>
 
-        {/* Social Links */}
-        <div className="mt-16 flex items-center justify-center gap-6">
-          <a
-            href="https://www.instagram.com/debsphere_academy?igsh=YnFrejRibnFhN2o0"
-            className="p-2.5 rounded-full border border-[#052073] text-gray-500 hover:text-[#6C3CE1] hover:border-[#6C3CE1]/40 transition-all duration-200"
-          >
-            <FaInstagram size={22} strokeWidth={1.5} color={LogoColor} />
-          </a>
-          <a
-            href="#"
-            className="p-2.5 rounded-full border border-[#052073] text-gray-500 hover:text-[#6C3CE1] hover:border-[#6C3CE1]/40 transition-all duration-200"
-          >
-            <FaTwitter size={22} strokeWidth={1.5} color={LogoColor} />
-          </a>
-          <a
-            href="#"
-            className="p-2.5 rounded-full border border-[#052073] text-gray-500 hover:text-[#6C3CE1] hover:border-[#6C3CE1]/40 transition-all duration-200"
-          >
-            <FaYoutube size={22} strokeWidth={1.5} color={LogoColor} />
-          </a>
-          <a
-            href="#"
-            className="p-2.5 rounded-full border border-[#052073] text-gray-500 hover:text-[#6C3CE1] hover:border-[#6C3CE1]/40 transition-all duration-200"
-          >
-            <FaLinkedin size={22} strokeWidth={1.5} color={LogoColor} />
-          </a>
-        </div>
-      </section>
+            <div
+              className="mt-10 flex flex-wrap justify-center gap-x-8 gap-y-3 mono text-xs"
+              style={{ color: "#6B7688" }}
+            >
+              <span className="flex items-center gap-2">
+                <Users size={15} style={{ color: "var(--green)" }} /> 500+
+                WAITLIST
+              </span>
+              <span className="hidden sm:inline">·</span>
+              <span className="flex items-center gap-2">
+                <Mail size={15} style={{ color: "var(--green)" }} /> WEEKLY
+                INSIGHTS
+              </span>
+              <span className="hidden sm:inline">·</span>
+              <span className="flex items-center gap-2">
+                <Sparkles size={15} style={{ color: "var(--green)" }} />{" "}
+                EXPERT-LED
+              </span>
+            </div>
 
-      {/* Footer */}
-      <footer className="max-w-6xl mx-auto px-6 py-8 border-t border-gray-100 text-center text-sm text-gray-400">
-        <p>© 2026 Debsphere Academy — data science, redefined.</p>
-      </footer>
+            <WaitlistForm />
+
+            {/* Social Links */}
+            <div className="mt-16 flex items-center justify-center gap-3">
+              {[
+                {
+                  icon: FaInstagram,
+                  href: "https://www.instagram.com/debsphere_academy?igsh=YnFrejRibnFhN2o0",
+                },
+                { icon: FaTwitter, href: "#" },
+                { icon: FaYoutube, href: "#" },
+                { icon: FaLinkedin, href: "#" },
+              ].map(({ icon: Icon, href }, i) => (
+                <a
+                  key={i}
+                  href={href}
+                  className="social-cell w-11 h-11 flex items-center justify-center border transition-colors"
+                  style={{ borderColor: "var(--rule)" }}
+                >
+                  <Icon size={17} color="var(--green)" />
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Footer */}
+        <footer
+          className="max-w-6xl mx-auto px-6 py-8 text-center mono text-xs"
+          style={{ color: "#8A93A2" }}
+        >
+          © 2026 Debsphere Academy — data science, redefined.
+        </footer>
+      </div>
     </div>
   );
 }

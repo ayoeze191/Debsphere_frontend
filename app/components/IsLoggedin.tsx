@@ -9,21 +9,10 @@ export const IsLoggedIn = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const isAuthRoute = openRoutes.includes(pathname);
-
   useEffect(() => {
-    if (window && window.localStorage) {
-      const token = window.localStorage.getItem("token");
-      if (!token) {
-        router.push(`/auth`);
-      } else {
-        router.push(pathname);
-      }
-      if (!token && !isAuthRoute) {
-        router.push(`/login`);
-      } else {
-        router.push(pathname);
-      }
+    const token = window.localStorage.getItem("token");
+    if (!token && !openRoutes.includes(pathname)) {
+      router.replace("/auth");
     }
   }, [pathname, router]);
 
