@@ -4,7 +4,6 @@ import {
   CheckCircle2,
   Clock,
   Users,
-  type LucideIcon,
 } from "lucide-react";
 import Link from "next/link";
 import CellTag from "./CellTag";
@@ -45,7 +44,7 @@ export default function SingleCourse({ course }: { course: ICourse }) {
             className="mono text-[11px] tracking-widest uppercase"
             style={{ color: "#052073" }}
           >
-            {course.category.name}
+            {course.category?.name ?? "Course"}
           </span>
         </div>
         <h2 className="serif text-3xl md:text-4xl font-semibold">
@@ -117,7 +116,7 @@ export default function SingleCourse({ course }: { course: ICourse }) {
             ₦{course.price}
           </div>
           <Link
-            href={`/courses/${course.id}`}
+            href={`/courses/${course.slug}`}
             className="mt-6 mono text-xs inline-flex items-center gap-1.5 pb-0.5 border-b"
             style={{ color: "#052073", borderColor: "#052073" }}
           >

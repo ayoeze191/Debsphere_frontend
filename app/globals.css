@@ -11,7 +11,9 @@
   --green: #052073;
   --green-tint: #052073;
   --gold: #AD8330;
-  --rule: #DCE0D8;
+  --rule: #E8EAF3;
+  /* --rule: rgb(214, 233, 195); */
+
 }
  
 .serif { font-family: 'Fraunces', serif; }

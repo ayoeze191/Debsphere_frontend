@@ -12,34 +12,7 @@ import {
 } from "lucide-react";
 import CoursesAPI from "@/services/courses";
 import { useEffect, useState } from "react";
-
-interface Course {
-  id: string;
-  title: string;
-  description: string;
-  price: number;
-  duration: string;
-  thumbnail?: string;
-  category?: {
-    name: string;
-  };
-  instructor?: {
-    name: string;
-  };
-  outcomes: string[];
-  sections: {
-    id: string;
-    position: number;
-    title: string;
-    lessons: {
-      id: string;
-      position: number;
-      title: string;
-      description?: string;
-      duration: number;
-    }[];
-  }[];
-}
+import type { Course } from "@/types/course";
 function CellTag({ children }: { children: React.ReactNode }) {
   return (
     <span
@@ -76,25 +49,19 @@ function formatTotalDuration(seconds: number) {
 
 export default function CoursePage({ slug }: { slug: string }) {
   const [course, setCourse] = useState<Course | null>(null);
-  const [loading, setLoading] = useState(false);
-
-  const getCourse = async () => {
-    setLoading(true);
-    try {
-      const res = await CoursesAPI.getSingleCourse(slug);
-      console.log(res.data.course);
-      setCourse(res.data.course);
-    } catch (err) {
-      console.log(err);
-    }
-    setLoading(false);
-  };
 
   useEffect(() => {
-    const fetchCourse = async () => {
-      await getCourse();
-    };
-    fetchCourse();
+    async function fetchCourse() {
+      try {
+        const response = await CoursesAPI.getSingleCourse(slug);
+        setCourse(response.data.course);
+      } catch (error) {
+        console.error(error);
+        setCourse(null);
+      }
+    }
+
+    void fetchCourse();
   }, [slug]);
 
   return (

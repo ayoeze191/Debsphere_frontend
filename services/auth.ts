@@ -8,7 +8,11 @@ interface LoginResponse {
 }
 
 type AuthAPIType = {
-  login: (email: string, password: string) => Promise<AxiosResponse<LoginResponse>>;
+  login: (
+    email: string,
+    password: string,
+  ) => Promise<AxiosResponse<LoginResponse>>;
+  getUser: () => Promise<User>;
   //   confirmAuth: (token: string) => Promise<any>;
   //   oAuthSignIn: (token: string) => Promise<any>;
   //   checkEmail: (email: string) => Promise<any>;
@@ -23,6 +27,9 @@ const AuthService: AuthAPIType = {
       email,
       password,
     });
+  },
+  getUser: async () => {
+    return (await axiosInstance.get("auth/user")).data;
   },
 };
 

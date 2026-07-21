@@ -16,12 +16,11 @@ export default function Home() {
         .mono { font-family: 'IBM Plex Mono', monospace; }
         .sans { font-family: 'IBM Plex Sans', sans-serif; }
         .grid-bg {
-          background-image:
-            linear-gradient(var(--rule) 1px, transparent 1px),
-            linear-gradient(90deg, var(--rule) 1px, transparent 1px);
-          background-size: 56px 56px;
-          
-        }
+  background-image:
+    linear-gradient(#E8EAF3 1px, transparent 1px),
+    linear-gradient(90deg, #E8EAF3 1px, transparent 1px);
+  background-size: 56px 56px;
+}
         .waitlist-input:focus {
           outline: none;
           border-color: var(--green) !important;

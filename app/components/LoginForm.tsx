@@ -3,25 +3,27 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
 import { DiChrome } from "react-icons/di";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useRouter, useSearchParams } from "next/navigation";
 import authService from "./../../services/auth";
 import { useAuthStore } from "@/store/auth";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 
-const LogoColor = "#052073";
+function CellTag({ children }: { children: React.ReactNode }) {
+  return (
+    <span
+      className="inline-flex items-center px-2 py-0.5 text-[11px] tracking-wider border"
+      style={{
+        fontFamily: "'IBM Plex Mono', monospace",
+        color: "var(--green)",
+        borderColor: "var(--rule)",
+        background: "var(--paper)",
+      }}
+    >
+      {children}
+    </span>
+  );
+}
 
 export default function LoginPage() {
   const authStore = useAuthStore();
@@ -29,18 +31,21 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const router = useRouter();
   const params = useSearchParams();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setError("");
     try {
       const data = await authService.login(email, password);
       authStore.setUser(data.data.user);
       authStore.setToken(data.data.token);
       router.push("/");
     } catch {
-      // The form stays visible so the user can correct their credentials.
+      setError("Incorrect email or password. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -48,124 +53,167 @@ export default function LoginPage() {
 
   useEffect(() => {
     const token = params.get("token");
-
     if (token) {
       localStorage.setItem("token", token);
     }
   }, [params]);
+
   const handleGoogleLogin = () => {
     window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/google`;
   };
 
   return (
-    <div className="min-h-screen  from-gray-50 via-white to-gray-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div
+      style={{ background: "var(--paper)", color: "var(--ink)" }}
+      className="min-h-screen flex items-center justify-center p-4"
+    >
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+        .serif { font-family: 'Fraunces', serif; }
+        .mono { font-family: 'IBM Plex Mono', monospace; }
+        .sans { font-family: 'IBM Plex Sans', sans-serif; }
+        .auth-input:focus { outline: none; border-color: var(--green) !important; }
+        .google-btn:hover { background: var(--green-tint); border-color: var(--green) !important; }
+        @keyframes ledger-spin { to { transform: rotate(360deg); } }
+        .ledger-spinner {
+          width: 16px; height: 16px;
+          border: 2px solid rgba(255,255,255,0.4);
+          border-top-color: white;
+          animation: ledger-spin 0.7s linear infinite;
+        }
+      `}</style>
+
+      <div className="sans w-full max-w-md">
         {/* Logo */}
-        <div className="flex items-center justify-center gap-3 mb-8">
+        <div className="flex items-center justify-center gap-3 mb-10">
           <div
-            className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg"
-            style={{ backgroundColor: LogoColor }}
+            className="w-10 h-10 flex items-center justify-center border"
+            style={{ borderColor: "var(--green)" }}
           >
-            <span className="text-white font-bold text-2xl">D</span>
+            <span
+              className="serif font-semibold text-lg"
+              style={{ color: "var(--green)" }}
+            >
+              D
+            </span>
           </div>
-          <span
-            className="text-2xl font-light tracking-tight"
-            style={{ color: LogoColor }}
-          >
-            Debsphere <span className="font-medium">Academy</span>
+          <span className="serif text-xl" style={{ color: "var(--ink)" }}>
+            Debsphere <span className="font-semibold">Academy</span>
           </span>
         </div>
 
-        <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold text-center text-gray-900">
-              Welcome back
-            </CardTitle>
-            <CardDescription className="text-center text-gray-500">
+        <div className="border" style={{ borderColor: "var(--rule)" }}>
+          <div
+            className="text-center p-8 pb-6 border-b"
+            style={{ borderColor: "var(--rule)" }}
+          >
+            <div className="flex justify-center mb-4">
+              <CellTag>AUTH · SIGN IN</CellTag>
+            </div>
+            <h1 className="serif text-2xl font-semibold">Welcome back</h1>
+            <p className="text-sm mt-2" style={{ color: "#6B7688" }}>
               Sign in to your account to continue learning
-            </CardDescription>
-          </CardHeader>
+            </p>
+          </div>
 
-          <CardContent className="space-y-4">
-            {/* Google Sign In Button */}
-            <Button
+          <div className="p-8 space-y-5">
+            {/* Google Sign In */}
+            <button
               type="button"
-              variant="outline"
-              className="w-full h-11 border-gray-200 hover:bg-gray-50 hover:border-[#6C3CE1]/30 transition-all duration-200"
               onClick={handleGoogleLogin}
               disabled={isLoading}
+              className="google-btn w-full h-11 flex items-center justify-center gap-2 border text-sm transition-colors disabled:opacity-50"
+              style={{ borderColor: "var(--rule)", color: "var(--ink)" }}
             >
               <DiChrome
-                className="mr-2 h-5 w-5 shrink-0"
-                color={LogoColor}
+                className="h-5 w-5"
+                style={{ color: "var(--green)" }}
                 aria-hidden="true"
               />
               Continue with Google
-            </Button>
+            </button>
 
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <Separator className="w-full" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-white px-2 text-gray-400">
-                  Or continue with email
-                </span>
-              </div>
+            <div className="relative flex items-center py-1">
+              <div
+                className="flex-1 h-px"
+                style={{ background: "var(--rule)" }}
+              />
+              <span
+                className="mono text-[10px] tracking-widest uppercase px-3"
+                style={{ color: "#9AA3B2" }}
+              >
+                Or continue with email
+              </span>
+              <div
+                className="flex-1 h-px"
+                style={{ background: "var(--rule)" }}
+              />
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div>
+                <label
                   htmlFor="email"
-                  className="text-sm font-medium text-gray-700"
+                  className="mono text-[11px] tracking-widest uppercase block mb-2"
+                  style={{ color: "#6B7688" }}
                 >
                   Email
-                </Label>
+                </label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <Input
+                  <Mail
+                    className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4"
+                    style={{ color: "#9AA3B2" }}
+                  />
+                  <input
                     id="email"
                     type="email"
                     placeholder="you@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10 h-11 border-gray-200 focus:border-[#6C3CE1] focus:ring-[#6C3CE1]/20"
+                    className="auth-input w-full pl-10 pr-4 py-3 border bg-transparent text-sm"
+                    style={{ borderColor: "var(--rule)", color: "var(--ink)" }}
                     required
                   />
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <Label
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <label
                     htmlFor="password"
-                    className="text-sm font-medium text-gray-700"
+                    className="mono text-[11px] tracking-widest uppercase"
+                    style={{ color: "#6B7688" }}
                   >
                     Password
-                  </Label>
+                  </label>
                   <Link
                     href="/forgot-password"
-                    className="text-sm text-[#6C3CE1] hover:text-[#5a2fb8] transition-colors hover:underline"
+                    className="mono text-[11px]"
+                    style={{ color: "var(--green)" }}
                   >
                     Forgot password?
                   </Link>
                 </div>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <Input
+                  <Lock
+                    className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4"
+                    style={{ color: "#9AA3B2" }}
+                  />
+                  <input
                     id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10 pr-10 h-11 border-gray-200 focus:border-[#6C3CE1] focus:ring-[#6C3CE1]/20"
+                    className="auth-input w-full pl-10 pr-10 py-3 border bg-transparent text-sm"
+                    style={{ borderColor: "var(--rule)", color: "var(--ink)" }}
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2"
+                    style={{ color: "#9AA3B2" }}
                   >
                     {showPassword ? (
                       <EyeOff className="h-4 w-4" />
@@ -176,54 +224,64 @@ export default function LoginPage() {
                 </div>
               </div>
 
-              <Button
+              {error && (
+                <p className="text-xs" style={{ color: "#B42318" }}>
+                  {error}
+                </p>
+              )}
+
+              <button
                 type="submit"
-                className="w-full h-11 text-white font-medium transition-all duration-200 hover:shadow-lg hover:shadow-[#6C3CE1]/20 active:scale-[0.98]"
-                style={{ backgroundColor: LogoColor }}
                 disabled={isLoading}
+                className="w-full h-11 flex items-center justify-center gap-2 text-white mono text-xs tracking-widest uppercase transition-opacity hover:opacity-90 disabled:opacity-60"
+                style={{ backgroundColor: "var(--green)" }}
               >
                 {isLoading ? (
-                  <div className="flex items-center gap-2">
-                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                    Signing in...
-                  </div>
+                  <>
+                    <span className="ledger-spinner" /> Signing in…
+                  </>
                 ) : (
-                  "Sign In"
+                  <>
+                    Sign in <ArrowRight size={14} />
+                  </>
                 )}
-              </Button>
+              </button>
             </form>
-          </CardContent>
+          </div>
 
-          <CardFooter className="flex flex-col space-y-4 border-t border-gray-100 pt-6">
-            <p className="text-sm text-gray-500">
+          <div
+            className="flex flex-col items-center gap-4 p-8 pt-6 border-t"
+            style={{ borderColor: "var(--rule)" }}
+          >
+            <p className="text-sm" style={{ color: "#6B7688" }}>
               Don&apos;t have an account?{" "}
               <Link
                 href="/signup"
-                className="text-[#6C3CE1] font-medium hover:text-[#5a2fb8] transition-colors hover:underline"
+                className="font-medium"
+                style={{ color: "var(--green)" }}
               >
                 Sign up for free
               </Link>
             </p>
-            <div className="flex items-center gap-4 text-xs text-gray-400">
-              <Link
-                href="/privacy"
-                className="hover:text-gray-600 transition-colors"
-              >
+            <div
+              className="flex items-center gap-4 mono text-[11px]"
+              style={{ color: "#9AA3B2" }}
+            >
+              <Link href="/privacy" className="hover:underline">
                 Privacy Policy
               </Link>
-              <span>•</span>
-              <Link
-                href="/terms"
-                className="hover:text-gray-600 transition-colors"
-              >
+              <span>·</span>
+              <Link href="/terms" className="hover:underline">
                 Terms of Service
               </Link>
             </div>
-          </CardFooter>
-        </Card>
+          </div>
+        </div>
 
-        {/* Footer */}
-        <p className="text-center text-xs text-gray-400 mt-6">
+        <p
+          className="text-center mono text-[11px] mt-8"
+          style={{ color: "#9AA3B2" }}
+        >
           © 2026 Debsphere Academy. All rights reserved.
         </p>
       </div>

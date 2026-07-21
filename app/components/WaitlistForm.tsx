@@ -13,7 +13,7 @@ export default function WaitlistForm() {
   const joinWaitlist = async (email: string) => {
     try {
       setLoading(true);
-      const { data } = await axios.post("/api/waitlist", {
+      await axios.post("/api/waitlist", {
         email,
       });
       setLoading(false);

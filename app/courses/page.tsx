@@ -1,9 +1,4 @@
-import {
-  Users,
-  Calendar,
-  Mail,
-  Phone,
-} from "lucide-react";
+import { Users, Calendar, Mail, Phone } from "lucide-react";
 import CellTag from "@/app/components/CellTag";
 import Courses from "@/app/components/Courses";
 
@@ -26,12 +21,12 @@ export default function CoursesPage() {
         .serif { font-family: 'Fraunces', serif; }
         .mono { font-family: 'IBM Plex Mono', monospace; }
         .sans { font-family: 'IBM Plex Sans', sans-serif; }
-        .grid-bg {
-          background-image:
-            linear-gradient(var(--rule) 1px, transparent 1px),
-            linear-gradient(90deg, var(--rule) 1px, transparent 1px);
-          background-size: 56px 56px;
-        }
+       .grid-bg {
+  background-image:
+    linear-gradient(#E8EAF3 1px, transparent 1px),
+    linear-gradient(90deg, #E8EAF3 1px, transparent 1px);
+  background-size: 56px 56px;
+}
         .row-hover { transition: background-color 0.2s ease; }
         .row-hover:hover { background-color: var(--green-tint); }
       `}</style>

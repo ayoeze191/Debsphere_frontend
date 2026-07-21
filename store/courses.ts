@@ -1,20 +1,9 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import CoursesAPI from "@/services/courses";
+import type { Course } from "@/types/course";
 
-export interface ICourse {
-  id: string;
-  title: string;
-  description: string;
-  thumbnail: string;
-  price: number;
-  isPublished: boolean;
-  categoryId: string;
-  instructorId: string;
-  duration: string;
-  outcomes: [];
-  category: { name: string };
-}
+export type ICourse = Course;
 
 export interface CourseState {
   courses: ICourse[];
@@ -31,7 +20,6 @@ export const useCourseStore = create<CourseState>()(
         try {
           set({ loadingCourses: true });
           const req = await CoursesAPI.getCourses();
-          console.log(req.data.courses);
           const data = req.data.courses;
           set({
             courses: data,

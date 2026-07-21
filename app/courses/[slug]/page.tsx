@@ -9,7 +9,6 @@ interface PageProps {
 export default async function Page({ params }: PageProps) {
   const { slug } = await params;
 
-  console.log(slug);
   return (
     <div>
       <CoursePage slug={slug} />

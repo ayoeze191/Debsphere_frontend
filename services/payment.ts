@@ -7,12 +7,18 @@ const PaymentApi = {
     phone: string;
     fullName: string;
   }) => {
-    return await AxiosInstance.post("/payment/initialize", {
-      courseId: payload.slug,
+    return await AxiosInstance.post("/payments/initialize", {
+      slug: payload.slug,
       email: payload.email,
       phoneNumber: payload.phone,
       fullName: payload.fullName,
     });
+  },
+  checkPaymentStatus: async (reference: string) => {
+    return await AxiosInstance.get(`/payments/status/${reference}`);
+  },
+  verifyPayment: async (reference: string) => {
+    return await AxiosInstance.post(`/payments/verify`, { reference });
   },
 };
 

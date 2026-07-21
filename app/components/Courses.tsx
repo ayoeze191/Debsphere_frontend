@@ -1,6 +1,5 @@
 "use client";
 
-import { BarChart3, Briefcase, TrendingUp } from "lucide-react";
 import { useEffect } from "react";
 import SingleCourse from "./SingleCourse";
 import { useCourseStore } from "@/store/courses";
@@ -58,19 +57,15 @@ import { useCourseStore } from "@/store/courses";
 // ];
 
 export default function Courses() {
-  const courseStore = useCourseStore();
+  const { courses, fetchCourses } = useCourseStore();
 
   useEffect(() => {
-    const getCourses = async () => {
-      console.log("Getting courses");
-      await courseStore.fetchCourses();
-    };
-    getCourses();
-  }, []);
+    void fetchCourses();
+  }, [fetchCourses]);
 
   return (
     <section className="max-w-6xl mx-auto px-6">
-      {courseStore.courses.map((course) => (
+      {courses.map((course) => (
         <SingleCourse key={course.id} course={course} />
       ))}
     </section>
