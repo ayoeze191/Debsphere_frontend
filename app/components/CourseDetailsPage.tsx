@@ -307,8 +307,8 @@ export default function CoursePage({ slug }: { slug: string }) {
                         Tuition
                       </div>
                       <div
-                        className="mono text-3xl font-medium mt-1"
-                        style={{ color: "var(--ink)" }}
+                        className="mono text-3xl font-medium mt-1 text-white"
+                        // style={{ color: "var(--ink)" }}
                       >
                         ₦{c.price.toLocaleString()}
                       </div>
@@ -383,8 +383,8 @@ export default function CoursePage({ slug }: { slug: string }) {
                             {ref}
                           </span>
                           <span
-                            className="font-medium"
-                            style={{ color: "var(--ink)" }}
+                            className="font-medium text-[var(--ink)] hover:text-white"
+                            // style={{ color: "var(--ink)" }}
                           >
                             {section.title}
                           </span>
