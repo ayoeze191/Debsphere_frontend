@@ -1,34 +1,33 @@
-import { Mail, Users, Sparkles } from "lucide-react";
+import Link from "next/link";
+import { Award, Layers, Users, ArrowRight } from "lucide-react";
 import { FaInstagram, FaTwitter, FaYoutube, FaLinkedin } from "react-icons/fa";
 import CellTag from "./components/CellTag";
-import WaitlistForm from "./components/WaitlistForm";
-import { Toaster } from "sonner";
+
 export default function Home() {
   return (
     <div
       style={{ background: "var(--paper)", color: "var(--ink)" }}
       className="min-h-screen"
     >
-      <Toaster />
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
         .serif { font-family: 'Fraunces', serif; }
         .mono { font-family: 'IBM Plex Mono', monospace; }
         .sans { font-family: 'IBM Plex Sans', sans-serif; }
         .grid-bg {
-  background-image:
-    linear-gradient(#E8EAF3 1px, transparent 1px),
-    linear-gradient(90deg, #E8EAF3 1px, transparent 1px);
-  background-size: 56px 56px;
-}
-        .waitlist-input:focus {
-          outline: none;
-          border-color: var(--green) !important;
+          background-image:
+            linear-gradient(#E8EAF3 1px, transparent 1px),
+            linear-gradient(90deg, #E8EAF3 1px, transparent 1px);
+          background-size: 56px 56px;
+          -webkit-mask-image: radial-gradient(ellipse 60% 55% at 50% 45%, transparent 40%, black 100%);
+          mask-image: radial-gradient(ellipse 60% 55% at 50% 45%, transparent 40%, black 100%);
         }
         .social-cell:hover {
           background: var(--green-tint);
           border-color: var(--green) !important;
         }
+        .cta-primary:hover { opacity: 0.9; }
+        .cta-secondary:hover { background: var(--green-tint); }
       `}</style>
 
       <div className="sans">
@@ -37,10 +36,10 @@ export default function Home() {
           className="relative overflow-hidden border-b"
           style={{ borderColor: "var(--rule)" }}
         >
-          <div className="absolute inset-0 grid-bg opacity-60 pointer-events-none" />
-          <div className="max-w-6xl mx-auto px-6 py-20 md:py-28 relative text-center">
+          <div className="absolute inset-0 grid-bg opacity-60 pointer-events-none z-0" />
+          <div className="max-w-6xl mx-auto px-6 py-20 md:py-28 relative z-10 text-center">
             <div className="flex items-center justify-center gap-3 mb-8">
-              <CellTag>STATUS · PRE-LAUNCH</CellTag>
+              <CellTag>STATUS · ENROLLING NOW</CellTag>
               <span
                 className="mono text-[11px] tracking-widest uppercase"
                 style={{ color: "var(--green)" }}
@@ -50,9 +49,9 @@ export default function Home() {
             </div>
 
             <h1 className="serif text-6xl md:text-8xl font-semibold leading-[1.02]">
-              Coming
+              Skills that move
               <br />
-              <span style={{ color: "var(--green)" }}>Soon.</span>
+              you <span style={{ color: "var(--green)" }}>forward.</span>
             </h1>
 
             <p
@@ -60,8 +59,8 @@ export default function Home() {
               style={{ color: "#4B5768" }}
             >
               Debsphere Academy bridges the gap between classroom learning and
-              industry experience, equipping you with practical,
-              industry-relevant skills for the global workforce.
+              industry experience — practical, industry-relevant skills for the
+              global workforce, taught by people who've done the work.
             </p>
 
             <div
@@ -69,23 +68,39 @@ export default function Home() {
               style={{ color: "#6B7688" }}
             >
               <span className="flex items-center gap-2">
-                <Users size={15} style={{ color: "var(--green)" }} /> 0+
-                WAITLIST
+                <Layers size={15} style={{ color: "var(--green)" }} /> 3 LIVE
+                COURSES
               </span>
               <span className="hidden sm:inline">·</span>
               <span className="flex items-center gap-2">
-                <Mail size={15} style={{ color: "var(--green)" }} /> WEEKLY
-                INSIGHTS
+                <Users size={15} style={{ color: "var(--green)" }} /> 12+
+                MENTORS
               </span>
               <span className="hidden sm:inline">·</span>
               <span className="flex items-center gap-2">
-                <Sparkles size={15} style={{ color: "var(--green)" }} />{" "}
-                EXPERT-LED
+                <Award size={15} style={{ color: "var(--green)" }} />
+                CERTIFICATE ON COMPLETION
               </span>
             </div>
-            <div className="z-50  " style={{ background: "var(--paper)" }}>
-              <WaitlistForm />
+
+            {/* CTAs */}
+            <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link
+                href="/courses"
+                className="cta-primary flex items-center justify-center gap-2 px-8 py-3.5 text-white mono text-xs tracking-widest uppercase transition-opacity"
+                style={{ backgroundColor: "var(--green)" }}
+              >
+                Browse courses <ArrowRight size={14} />
+              </Link>
+              <Link
+                href="/auth"
+                className="cta-secondary flex items-center justify-center gap-2 px-8 py-3.5 mono text-xs tracking-widest uppercase border transition-colors"
+                style={{ borderColor: "var(--rule)", color: "var(--ink)" }}
+              >
+                Sign in
+              </Link>
             </div>
+
             {/* Social Links */}
             <div className="mt-16 flex items-center justify-center gap-3">
               {[

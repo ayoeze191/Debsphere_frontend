@@ -192,10 +192,9 @@ export default function PaymentCallbackPage() {
                 </span>
               </div>
             </div>
-
             <div className="p-6 pt-0">
               <Link
-                href={`/dashboard/learn}`}
+                href={`/dashboard/learn`}
                 className="flex items-center justify-center gap-2 py-3.5 text-white mono text-xs tracking-widest uppercase transition-opacity hover:opacity-90"
                 style={{ backgroundColor: "var(--green)" }}
               >

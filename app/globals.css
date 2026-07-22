@@ -15,6 +15,11 @@
   /* --rule: rgb(214, 233, 195); */
 
 }
+
+.google-btn:hover{
+    color: #052073;
+    background-color: #eeeeee;
+}
  
 .serif { font-family: 'Fraunces', serif; }
 .mono { font-family: 'IBM Plex Mono', monospace; }

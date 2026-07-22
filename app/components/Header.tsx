@@ -1,8 +1,27 @@
 "use client";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import { useAuthStore } from "@/store/auth";
+import { usePathname } from "next/navigation";
 
 const Header = () => {
+  const { user } = useAuthStore();
+  const pathname = usePathname();
+  const isDashboard = pathname.startsWith("/dashboard");
+
+  // Avoids a flash of "Sign In" before a localStorage-persisted auth store
+  // has rehydrated on the client — unrelated to which route we're on, so
+  // this always fires once on mount regardless of isDashboard.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    function run() {
+      setMounted(true);
+    }
+    run();
+  }, []);
+
   return (
     <header
       className="sticky top-0 z-50 border-b"
@@ -40,6 +59,25 @@ const Header = () => {
             </Link>
           ))}
         </nav>
+
+        {/* CTA only shows once mounted (avoids the hydration flash) AND
+            when we're not already inside the dashboard (no point telling
+            someone to "Continue Learning" while they're already there). */}
+        {mounted && !isDashboard && (
+          <div className="hidden md:flex items-center">
+            <Link
+              href={user ? "/dashboard/learn" : "/auth"}
+              className="flex items-center gap-2 px-5 py-2.5 mono text-xs tracking-widest uppercase border transition-colors"
+              style={{
+                borderColor: "var(--green)",
+                color: user ? "var(--green)" : "white",
+                background: user ? "transparent" : "var(--green)",
+              }}
+            >
+              {user ? "Continue Learning" : "Sign In"} <ArrowRight size={14} />
+            </Link>
+          </div>
+        )}
 
         {/* mobile menu placeholder - wire up to your existing mobile nav */}
         <button

@@ -43,7 +43,7 @@ export default function LoginPage() {
       const data = await authService.login(email, password);
       authStore.setUser(data.data.user);
       authStore.setToken(data.data.token);
-      router.push("/");
+      router.push("/dashboard/learn");
     } catch {
       setError("Incorrect email or password. Please try again.");
     } finally {
@@ -256,7 +256,7 @@ export default function LoginPage() {
             <p className="text-sm" style={{ color: "#6B7688" }}>
               Don&apos;t have an account?{" "}
               <Link
-                href="/signup"
+                href="/auth?auth=signup"
                 className="font-medium"
                 style={{ color: "var(--green)" }}
               >

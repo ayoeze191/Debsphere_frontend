@@ -1,14 +1,14 @@
-import React, { Suspense } from "react";
+import React from "react";
 import LoginPage from "../components/LoginForm";
+import SignupPage from "../components/SjgnupForm";
 
-const page = () => {
-  return (
-    <div>
-      <Suspense>
-        <LoginPage />
-      </Suspense>
-    </div>
-  );
-};
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ auth?: string }>;
+}) {
+  // ?auth=signup shows the signup form; anything else (or missing) defaults to login.
+  const { auth } = await searchParams;
 
-export default page;
+  return <div>{auth === "signup" ? <SignupPage /> : <LoginPage />}</div>;
+}
