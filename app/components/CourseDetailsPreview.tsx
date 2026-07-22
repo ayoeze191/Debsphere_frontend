@@ -92,6 +92,7 @@ const course = {
 };
 
 function CellTag({ children }: { children: React.ReactNode }) {
+  console.log("Ezekiel");
   return (
     <span
       className="inline-flex items-center px-2 py-0.5 text-[11px] tracking-wider border"
