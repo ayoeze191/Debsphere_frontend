@@ -12,6 +12,8 @@ import {
 } from "lucide-react";
 import CoursesAPI from "@/services/courses";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/store/auth";
 import type { Course } from "@/types/course";
 function CellTag({ children }: { children: React.ReactNode }) {
   return (
@@ -49,7 +51,8 @@ function formatTotalDuration(seconds: number) {
 
 export default function CoursePage({ slug }: { slug: string }) {
   const [course, setCourse] = useState<Course | null>(null);
-
+  const store = useAuthStore();
+  const route = useRouter();
   useEffect(() => {
     async function fetchCourse() {
       try {
@@ -64,6 +67,14 @@ export default function CoursePage({ slug }: { slug: string }) {
     void fetchCourse();
   }, [slug]);
 
+  const handleEnroll = () => {
+    if (store.token) {
+      const urls = `/courses/${slug}/checkout`;
+      route.push(urls);
+    } else {
+      route.push("/auth");
+    }
+  };
   return (
     <div
       style={{ background: "var(--paper)", color: "var(--ink)" }}
@@ -312,13 +323,13 @@ export default function CoursePage({ slug }: { slug: string }) {
                       >
                         ₦{c.price.toLocaleString()}
                       </div>
-                      <Link
-                        href={`/courses/${slug}/checkout`}
+                      <button
+                        onClick={() => handleEnroll(slug)}
                         className="mt-6 w-full py-3.5 text-white mono text-xs tracking-widest uppercase flex items-center justify-center gap-2 transition-opacity hover:opacity-90"
                         style={{ backgroundColor: "var(--green)" }}
                       >
                         Enroll now <ArrowRight size={14} />
-                      </Link>
+                      </button>
                       <p
                         className="mt-4 text-xs leading-relaxed"
                         style={{ color: "#6B7688" }}

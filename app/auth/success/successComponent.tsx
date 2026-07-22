@@ -29,7 +29,6 @@ export default function AuthSuccessPage() {
     async function authenticate() {
       try {
         const token = searchParams.get("token");
-
         if (!token) {
           router.replace("/login");
           return;
