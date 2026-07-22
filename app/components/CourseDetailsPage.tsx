@@ -67,7 +67,7 @@ export default function CoursePage({ slug }: { slug: string }) {
     void fetchCourse();
   }, [slug]);
 
-  const handleEnroll = () => {
+  const handleEnroll = (slug: string) => {
     if (store.token) {
       const urls = `/courses/${slug}/checkout`;
       route.push(urls);
