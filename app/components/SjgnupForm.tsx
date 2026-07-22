@@ -1,4 +1,3 @@
-// app/signup/page.tsx
 "use client";
 
 import { useState } from "react";
@@ -16,7 +15,6 @@ import {
 } from "lucide-react";
 import { DiChrome } from "react-icons/di";
 import authService from "@/services/auth";
-import { useAuthStore } from "@/store/auth";
 import { toast, Toaster } from "sonner";
 function CellTag({ children }: { children: React.ReactNode }) {
   return (
@@ -36,7 +34,6 @@ function CellTag({ children }: { children: React.ReactNode }) {
 
 export default function SignupPage() {
   const router = useRouter();
-  const authStore = useAuthStore();
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);

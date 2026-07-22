@@ -10,6 +10,7 @@ const Header = () => {
   const { user } = useAuthStore();
   const pathname = usePathname();
   const isDashboard = pathname.startsWith("/dashboard");
+  const isAdmin = pathname.startsWith("/admin");
 
   // Avoids a flash of "Sign In" before a localStorage-persisted auth store
   // has rehydrated on the client — unrelated to which route we're on, so
@@ -21,6 +22,8 @@ const Header = () => {
     }
     run();
   }, []);
+
+  if (isAdmin) return null;
 
   return (
     <header

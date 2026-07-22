@@ -60,7 +60,7 @@ export default function Home() {
             >
               Debsphere Academy bridges the gap between classroom learning and
               industry experience — practical, industry-relevant skills for the
-              global workforce, taught by people who've done the work.
+              global workforce, taught by people who&apos;ve done the work.
             </p>
 
             <div

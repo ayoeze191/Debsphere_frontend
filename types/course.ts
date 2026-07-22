@@ -1,7 +1,10 @@
 export interface Category {
+  id: string;
   name: string;
+  _count: {
+    courses: number;
+  };
 }
-
 export interface Instructor {
   name: string;
 }

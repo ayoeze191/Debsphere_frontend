@@ -16,6 +16,7 @@ export interface User {
   favoriteCourses?: string[];
   points?: number;
   referredUsers?: string[];
+  role?: string;
 }
 
 interface Token {
