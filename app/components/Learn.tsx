@@ -4,6 +4,7 @@ import { PlayCircle, CheckCircle2, BookOpen, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import CoursesAPI from "@/services/courses";
 import type { Enrollment } from "@/types/course";
+import { IsLoggedIn } from "./IsLoggedin";
 
 const FILTERS = ["All", "In Progress", "Completed"];
 
@@ -73,6 +74,7 @@ export default function LearnPage() {
       style={{ background: "var(--paper)", color: "var(--ink)" }}
       className="min-h-screen"
     >
+      <IsLoggedIn />
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
         :root {
