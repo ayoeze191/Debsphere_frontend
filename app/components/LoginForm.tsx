@@ -8,6 +8,7 @@ import { DiChrome } from "react-icons/di";
 import { useRouter, useSearchParams } from "next/navigation";
 import authService from "./../../services/auth";
 import { useAuthStore } from "@/store/auth";
+import { IsLoggedIn } from "./IsLoggedin";
 
 function CellTag({ children }: { children: React.ReactNode }) {
   return (
@@ -67,6 +68,7 @@ export default function LoginPage() {
       style={{ background: "var(--paper)", color: "var(--ink)" }}
       className="min-h-screen flex items-center justify-center p-4"
     >
+      <IsLoggedIn />
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
         .serif { font-family: 'Fraunces', serif; }

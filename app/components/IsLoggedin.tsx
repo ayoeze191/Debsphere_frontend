@@ -13,6 +13,8 @@ export const IsLoggedIn = () => {
     const token = window.localStorage.getItem("token");
     if (!token && !openRoutes.includes(pathname)) {
       router.replace("/auth");
+    } else {
+      router.replace("/dashboard/learn");
     }
   }, [pathname, router]);
 

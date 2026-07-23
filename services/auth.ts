@@ -23,6 +23,7 @@ type AuthAPIType = {
   ) => Promise<AxiosResponse<LoginResponse>>;
   getUser: () => Promise<User>;
   signup: (payload: SignupPayload) => Promise<AxiosResponse<User>>;
+  verifyEmail: (token: string) => Promise<AxiosResponse<User>>;
 };
 
 const AuthService: AuthAPIType = {
@@ -37,6 +38,9 @@ const AuthService: AuthAPIType = {
   },
   signup: async (payload: SignupPayload) => {
     return await axiosInstance.post("/auth/register", payload);
+  },
+  verifyEmail: async (token: string) => {
+    return await axiosInstance.get(`/auth/verify-email?token=${token}`);
   },
 };
 
