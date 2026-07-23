@@ -13,6 +13,8 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import AdminAPI from "@/services/admin";
+import { AdminCategory, AdminUser } from "@/types/admin";
+import { AxiosError } from "axios";
 
 function CellTag({ children }: { children: React.ReactNode }) {
   return (
@@ -73,8 +75,8 @@ export default function NewCoursePage() {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
   const [slugTouched, setSlugTouched] = useState(false);
-  const [categories, setCategories] = useState([]);
-  const [instructors, setInstructors] = useState([]);
+  const [categories, setCategories] = useState<AdminCategory[]>([]);
+  const [instructors, setInstructors] = useState<AdminUser[]>([]);
   const [steps, setSteps] = useState<Step[]>([]);
   const [submitError, setSubmitError] = useState("");
 
@@ -102,7 +104,7 @@ export default function NewCoursePage() {
         setCategories(catRes.data.categories);
         // No dedicated "instructors" endpoint — filter the full user list.
         setInstructors(
-          userRes.data.users.filter((u: any) => u.role === "INSTRUCTOR"),
+          userRes.data.users.filter((u) => u.role === "INSTRUCTOR"),
         );
       } catch (err) {
         console.error(err);
@@ -111,7 +113,7 @@ export default function NewCoursePage() {
     loadOptions();
   }, []);
 
-  function updateField(key: string, value: any) {
+  function updateField(key: string, value: string) {
     setForm((f) => ({ ...f, [key]: value }));
   }
   function updateTitle(title: string) {
@@ -274,12 +276,19 @@ export default function NewCoursePage() {
       }
 
       router.push(`/admin/courses/${courseId}`);
-    } catch (err: any) {
+    } catch (err) {
       setStepStatus(stepIndex, "error");
-      setSubmitError(
-        err?.response?.data?.message ??
+
+      if (err instanceof AxiosError) {
+        setSubmitError(
+          err.response?.data?.message ??
+            "Something failed partway through. Whatever completed above already exists — open the course to finish manually.",
+        );
+      } else {
+        setSubmitError(
           "Something failed partway through. Whatever completed above already exists — open the course to finish manually.",
-      );
+        );
+      }
     } finally {
       setSaving(false);
     }
@@ -404,7 +413,7 @@ export default function NewCoursePage() {
                     style={{ borderColor: "var(--rule)", color: "var(--ink)" }}
                   >
                     <option value="">— Uncategorized —</option>
-                    {categories.map((c: any) => (
+                    {categories.map((c) => (
                       <option key={c.id} value={c.id}>
                         {c.name}
                       </option>
@@ -428,7 +437,7 @@ export default function NewCoursePage() {
                   required
                 >
                   <option value="">Select an instructor…</option>
-                  {instructors.map((i: any) => (
+                  {instructors.map((i) => (
                     <option key={i.id} value={i.id}>
                       {i.firstName} {i.lastName}
                     </option>
@@ -470,9 +479,10 @@ export default function NewCoursePage() {
                 style={{ color: "#946800" }}
               >
                 Backend gap: your <code>createCourse</code>/
-                <code>updateCourse</code> controllers don't read or save
-                <code> outcomes</code> yet. Anything typed below won't persist
-                until that's added server-side — see note after this form.
+                <code>updateCourse</code> controllers don&apos;t read or save
+                <code> outcomes</code> yet. Anything typed below won&apos;t
+                persist until that&apos;s added server-side — see note after
+                this form.
               </p>
             </div>
 
@@ -664,8 +674,8 @@ export default function NewCoursePage() {
             </div>
 
             <p className="text-xs mt-6" style={{ color: "#9AA3B2" }}>
-              Video files are attached per lesson after creation — there's no
-              create-video endpoint in your admin controller yet, only{" "}
+              Video files are attached per lesson after creation — there&apos;s
+              no create-video endpoint in your admin controller yet, only{" "}
               <code>updateVideo</code> for an existing record. That upload flow
               needs building separately.
             </p>
