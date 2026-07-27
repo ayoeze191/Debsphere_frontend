@@ -3,10 +3,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Tag, Users, CreditCard, LogOut } from "lucide-react";
+import { LayoutDashboard, Tag, Users, CreditCard, BookOpen, LogOut } from "lucide-react";
+import { AuthGuard } from "@/app/components/AuthGuard";
 
 const NAV = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/admin/courses", label: "Courses", icon: BookOpen },
   { href: "/admin/categories", label: "Categories", icon: Tag },
   { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/payments", label: "Payments", icon: CreditCard },
@@ -40,6 +42,7 @@ export default function AdminLayout({
   }
 
   return (
+    <AuthGuard adminOnly>
     <div
       style={{ background: "var(--paper)", color: "var(--ink)" }}
       className="min-h-screen"
@@ -123,5 +126,6 @@ export default function AdminLayout({
         <div className="flex-1 min-w-0">{children}</div>
       </div>
     </div>
+    </AuthGuard>
   );
 }

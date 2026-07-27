@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import PaymentApi from "@/services/payment";
 import { CheckCircle2, XCircle, ArrowRight } from "lucide-react";
+import { AuthGuard } from "@/app/components/AuthGuard";
 
 function CellTag({ children }: { children: React.ReactNode }) {
   return (
@@ -126,6 +127,7 @@ export default function PaymentCallbackPage() {
   }, [searchParams]);
 
   return (
+    <AuthGuard>
     <div
       style={{ background: "var(--paper)", color: "var(--ink)" }}
       className="min-h-screen flex items-center justify-center"
@@ -254,5 +256,6 @@ export default function PaymentCallbackPage() {
         )}
       </div>
     </div>
+    </AuthGuard>
   );
 }

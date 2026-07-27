@@ -7,6 +7,11 @@ interface LoginResponse {
   token: string;
 }
 
+interface CurrentUserResponse {
+  message: string;
+  user: User;
+}
+
 // interface SignupResponse {
 
 // }
@@ -21,7 +26,7 @@ type AuthAPIType = {
     email: string,
     password: string,
   ) => Promise<AxiosResponse<LoginResponse>>;
-  getUser: () => Promise<User>;
+  getUser: () => Promise<CurrentUserResponse>;
   signup: (payload: SignupPayload) => Promise<AxiosResponse<User>>;
   verifyEmail: (token: string) => Promise<AxiosResponse<User>>;
 };

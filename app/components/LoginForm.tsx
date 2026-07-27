@@ -8,7 +8,6 @@ import { DiChrome } from "react-icons/di";
 import { useRouter, useSearchParams } from "next/navigation";
 import authService from "./../../services/auth";
 import { useAuthStore } from "@/store/auth";
-import { IsLoggedIn } from "./IsLoggedin";
 
 function CellTag({ children }: { children: React.ReactNode }) {
   return (
@@ -44,7 +43,11 @@ export default function LoginPage() {
       const data = await authService.login(email, password);
       authStore.setUser(data.data.user);
       authStore.setToken(data.data.token);
-      router.push("/dashboard/learn");
+      const next = params.get("next");
+      const destination = next?.startsWith("/") && !next.startsWith("//")
+        ? next
+        : "/dashboard/learn";
+      router.replace(destination);
     } catch {
       setError("Incorrect email or password. Please try again.");
     } finally {
@@ -60,6 +63,10 @@ export default function LoginPage() {
   }, [params]);
 
   const handleGoogleLogin = () => {
+    const next = params.get("next");
+    if (next?.startsWith("/") && !next.startsWith("//")) {
+      sessionStorage.setItem("auth-return-to", next);
+    }
     window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/google`;
   };
 

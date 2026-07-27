@@ -41,3 +41,16 @@ export interface AdminCategory {
     courses: number;
   };
 }
+
+export interface AdminCourse {
+  id: string;
+  title: string;
+  slug: string;
+  thumbnail: string;
+  price: number;
+  isPublished: boolean;
+  duration?: string | null;
+  category?: { id: string; name: string } | null;
+  instructor: Pick<AdminUser, "id" | "firstName" | "lastName" | "email">;
+  _count: { sections: number; enrollments: number; payment: number };
+}

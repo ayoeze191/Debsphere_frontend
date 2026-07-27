@@ -4,7 +4,6 @@ import { PlayCircle, CheckCircle2, BookOpen, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import CoursesAPI from "@/services/courses";
 import type { Enrollment } from "@/types/course";
-import { IsLoggedIn } from "./IsLoggedin";
 
 const FILTERS = ["All", "In Progress", "Completed"];
 
@@ -25,11 +24,12 @@ function CellTag({ children }: { children: React.ReactNode }) {
 }
 
 function ProgressBar({ value }: { value: number }) {
+  const percentage = Math.min(100, Math.max(0, value));
   return (
     <div className="w-full h-1.5 border" style={{ borderColor: "var(--rule)" }}>
       <div
         className="h-full"
-        style={{ width: `${value}%`, background: "var(--green)" }}
+        style={{ width: `${percentage}%`, background: "var(--green)" }}
       />
     </div>
   );
@@ -74,7 +74,6 @@ export default function LearnPage() {
       style={{ background: "var(--paper)", color: "var(--ink)" }}
       className="min-h-screen"
     >
-      <IsLoggedIn />
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
         :root {
@@ -223,6 +222,8 @@ export default function LearnPage() {
               {filtered.map((enrollment) => {
                 const c = enrollment.course;
                 const isComplete = enrollment.progress >= 100;
+                const firstLessonId = c.sections[0]?.lessons[0]?.id;
+                const resumeLessonId = enrollment.lastLessonId ?? firstLessonId;
                 return (
                   <div
                     key={enrollment.id}
@@ -280,20 +281,21 @@ export default function LearnPage() {
                           Last: {enrollment.lastLesson.title}
                         </p>
                       )}
-                      <a
-                        href={`/dashboard/learn/${c.slug}/${enrollment.lastLessonId}`}
-                        className="mt-6 flex items-center justify-center gap-2 py-3 mono text-xs tracking-widest uppercase border transition-colors"
-                        style={{
-                          borderColor: "var(--green)",
-                          color: isComplete ? "var(--green)" : "white",
-                          background: isComplete
-                            ? "transparent"
-                            : "var(--green)",
-                        }}
-                      >
-                        {isComplete ? "Review course" : "Resume learning"}{" "}
-                        <ArrowRight size={14} />
-                      </a>
+                      {resumeLessonId ? (
+                        <Link
+                          href={`/dashboard/learn/${c.slug}/${resumeLessonId}`}
+                          className="mt-6 flex items-center justify-center gap-2 py-3 mono text-xs tracking-widest uppercase border transition-colors"
+                          style={{
+                            borderColor: "var(--green)",
+                            color: isComplete ? "var(--green)" : "white",
+                            background: isComplete ? "transparent" : "var(--green)",
+                          }}
+                        >
+                          {isComplete ? "Review course" : "Resume learning"} <ArrowRight size={14} />
+                        </Link>
+                      ) : (
+                        <p className="mt-6 text-xs" style={{ color: "#8A93A2" }}>Lessons will appear here when this course has content.</p>
+                      )}
                     </div>
                   </div>
                 );

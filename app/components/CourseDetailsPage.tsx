@@ -494,13 +494,14 @@ export default function CoursePage({ slug }: { slug: string }) {
                 );
               }}
             </Loading>
-            <Link
-              href={`/courses/${slug}/checkout`}
+            <button
+              type="button"
+              onClick={() => handleEnroll(slug)}
               className="inline-flex items-center gap-2 px-8 py-3.5 text-white mono text-xs tracking-widest uppercase transition-opacity hover:opacity-90 whitespace-nowrap"
               style={{ backgroundColor: "var(--green)" }}
             >
               Enroll now <ArrowRight size={16} />
-            </Link>
+            </button>
           </div>
         </section>
 

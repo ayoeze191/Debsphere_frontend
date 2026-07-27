@@ -33,6 +33,9 @@ const AdminAPI = {
 
   // Courses
   listCourses: () => api.get("/admin/courses"),
+  createUploadSignature: (resourceType: "image" | "video") =>
+    api.post("/admin/uploads/signature", { resourceType }),
+  getCourse: (id: string) => api.get(`/admin/courses/${id}`),
   createCourse: (data: AdminPayload) => api.post("/admin/courses", data),
   updateCourse: (id: string, data: AdminPayload) =>
     api.patch(`/admin/courses/${id}`, data),
@@ -75,6 +78,10 @@ const AdminAPI = {
   // Video
   updateVideo: (id: string, data: AdminPayload) =>
     api.patch(`/admin/videos/${id}`, data),
+  createVideo: (
+    lessonId: string,
+    data: { originalUrl: string; thumbnail?: string },
+  ) => api.post(`/admin/lessons/${lessonId}/videos`, data),
 };
 
 export default AdminAPI;

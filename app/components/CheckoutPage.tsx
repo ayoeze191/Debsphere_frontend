@@ -8,6 +8,7 @@ import CoursesAPI from "@/services/courses";
 import PaymentApi from "@/services/payment";
 import { toast } from "sonner";
 import type { Course } from "@/types/course";
+import { AuthGuard } from "@/app/components/AuthGuard";
 function CellTag({ children }: { children: React.ReactNode }) {
   return (
     <span
@@ -87,6 +88,7 @@ export default function CheckoutPage({ slug }: { slug: string }) {
   // };
 
   return (
+    <AuthGuard>
     <div
       style={{ background: "var(--paper)", color: "var(--ink)" }}
       className="min-h-screen"
@@ -355,5 +357,6 @@ export default function CheckoutPage({ slug }: { slug: string }) {
         </div>
       </div>
     </div>
+    </AuthGuard>
   );
 }

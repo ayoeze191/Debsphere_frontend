@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import AuthService from "@/services/auth";
+import { useAuthStore } from "@/store/auth";
 
 function CellTag({ children }: { children: React.ReactNode }) {
   return (
@@ -24,35 +25,40 @@ export default function AuthSuccessPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [status, setStatus] = useState<"verifying" | "error">("verifying");
+  const setUser = useAuthStore((state) => state.setUser);
+  const setToken = useAuthStore((state) => state.setToken);
 
   useEffect(() => {
     async function authenticate() {
       try {
         const token = searchParams.get("token");
         if (!token) {
-          router.replace("/login");
+          router.replace("/auth");
           return;
         }
 
-        // Save the token
-        localStorage.setItem("token", token);
+        setToken(token);
 
         const user = await AuthService.getUser();
 
-        // Save the user
-        localStorage.setItem("user", JSON.stringify(user));
+        setUser(user.user);
 
-        // Go to dashboard
-        router.replace("/dashboard/learn");
+        const returnTo = sessionStorage.getItem("auth-return-to");
+        sessionStorage.removeItem("auth-return-to");
+        router.replace(
+          returnTo?.startsWith("/") && !returnTo.startsWith("//")
+            ? returnTo
+            : "/dashboard/learn",
+        );
       } catch (error) {
         console.error(error);
         setStatus("error");
-        router.replace("/login");
+        router.replace("/auth");
       }
     }
 
     authenticate();
-  }, [router, searchParams]);
+  }, [router, searchParams, setToken, setUser]);
 
   return (
     <div

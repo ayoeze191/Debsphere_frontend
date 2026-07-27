@@ -11,10 +11,12 @@ import {
   CheckCircle2,
   Circle,
   AlertTriangle,
+  ClipboardPaste,
 } from "lucide-react";
 import AdminAPI from "@/services/admin";
 import { AdminCategory, AdminUser } from "@/types/admin";
 import { AxiosError } from "axios";
+import { ThumbnailUpload } from "@/app/components/Admin/ThumbnailUpload";
 
 function CellTag({ children }: { children: React.ReactNode }) {
   return (
@@ -66,10 +68,63 @@ function sectionRef(position: number) {
   return String.fromCharCode(64 + position);
 }
 
-const emptyLesson = () => ({ title: "", description: "", duration: "" });
-const emptySection = () => ({ title: "", lessons: [emptyLesson()] });
+type LessonDraft = { title: string; description: string; duration: string };
+type SectionDraft = { title: string; lessons: LessonDraft[] };
+
+const emptyLesson = (): LessonDraft => ({
+  title: "",
+  description: "",
+  duration: "",
+});
+const emptySection = (): SectionDraft => ({
+  title: "",
+  lessons: [emptyLesson()],
+});
 
 type Step = { label: string; status: "pending" | "active" | "done" | "error" };
+
+// ── Bulk curriculum parser ──────────────────────────────────────────
+// Paste format:
+//   Section title on its own line
+//   - Lesson title | minutes
+//   (blank line)
+//   Next section title
+//   - ...
+// "| minutes" is optional, defaults to 5.
+type ParsedLesson = { title: string; minutes: number };
+type ParsedSection = { title: string; lessons: ParsedLesson[] };
+
+function parseCurriculum(text: string): ParsedSection[] {
+  const lines = text.split("\n").map((l) => l.trimEnd());
+  const sections: ParsedSection[] = [];
+  let current: ParsedSection | null = null;
+
+  for (const raw of lines) {
+    const line = raw.trim();
+    if (!line) continue;
+
+    const isLesson = /^[-*]\s+/.test(line);
+    if (isLesson) {
+      if (!current) continue;
+      const withoutBullet = line.replace(/^[-*]\s+/, "");
+      const [titlePart, durationPart] = withoutBullet
+        .split("|")
+        .map((s) => s.trim());
+      const minutes = durationPart
+        ? Number(durationPart.replace(/[^\d.]/g, ""))
+        : 5;
+      current.lessons.push({
+        title: titlePart,
+        minutes: Number.isFinite(minutes) && minutes > 0 ? minutes : 5,
+      });
+    } else {
+      current = { title: line, lessons: [] };
+      sections.push(current);
+    }
+  }
+
+  return sections.filter((s) => s.title && s.lessons.length > 0);
+}
 
 export default function NewCoursePage() {
   const router = useRouter();
@@ -94,6 +149,11 @@ export default function NewCoursePage() {
     sections: [emptySection()],
   });
 
+  // Bulk import state
+  const [bulkOpen, setBulkOpen] = useState(false);
+  const [bulkText, setBulkText] = useState("");
+  const parsedPreview = bulkText.trim() ? parseCurriculum(bulkText) : [];
+
   useEffect(() => {
     async function loadOptions() {
       try {
@@ -102,7 +162,6 @@ export default function NewCoursePage() {
           AdminAPI.listUsers(),
         ]);
         setCategories(catRes.data.categories);
-        // No dedicated "instructors" endpoint — filter the full user list.
         setInstructors(
           userRes.data.users.filter((u) => u.role === "INSTRUCTOR"),
         );
@@ -159,7 +218,7 @@ export default function NewCoursePage() {
   function updateLesson(
     sectionIndex: number,
     lessonIndex: number,
-    key: string,
+    key: keyof LessonDraft,
     value: string,
   ) {
     setForm((f) => ({
@@ -197,6 +256,43 @@ export default function NewCoursePage() {
     }));
   }
 
+  // Turns pasted text straight into form.sections — nothing is created on
+  // the backend yet, this just fills the draft the same as manual typing
+  // would, in one shot instead of dozens of clicks.
+  function importBulkCurriculum() {
+    const parsed = parseCurriculum(bulkText);
+    if (parsed.length === 0) return;
+
+    const draftSections: SectionDraft[] = parsed.map((s) => ({
+      title: s.title,
+      lessons: s.lessons.map((l) => ({
+        title: l.title,
+        description: "",
+        duration: String(l.minutes),
+      })),
+    }));
+
+    setForm((f) => {
+      // If the only section so far is the untouched blank starter one,
+      // replace it instead of leaving an empty section dangling above
+      // the imported ones.
+      const isBlankStarter =
+        f.sections.length === 1 &&
+        f.sections[0].title.trim() === "" &&
+        f.sections[0].lessons.every((l) => l.title.trim() === "");
+
+      return {
+        ...f,
+        sections: isBlankStarter
+          ? draftSections
+          : [...f.sections, ...draftSections],
+      };
+    });
+
+    setBulkText("");
+    setBulkOpen(false);
+  }
+
   function setStepStatus(index: number, status: Step["status"]) {
     setSteps((prev) =>
       prev.map((s, i) => (i === index ? { ...s, status } : s)),
@@ -214,7 +310,6 @@ export default function NewCoursePage() {
         lessons: s.lessons.filter((l) => l.title.trim() !== ""),
       }));
 
-    // Build the step list up front so the log renders immediately.
     const stepList: Step[] = [{ label: "Create course", status: "pending" }];
     validSections.forEach((s, si) => {
       stepList.push({
@@ -233,7 +328,6 @@ export default function NewCoursePage() {
 
     let stepIndex = 0;
     try {
-      // 1. Course itself — flat fields only, no nested sections/lessons/outcomes.
       setStepStatus(stepIndex, "active");
       const courseRes = await AdminAPI.createCourse({
         title: form.title,
@@ -250,8 +344,6 @@ export default function NewCoursePage() {
       setStepStatus(stepIndex, "done");
       stepIndex++;
 
-      // 2. Sections + lessons, sequentially — each lesson needs its parent
-      //    section's real id, which we only get after that section is created.
       for (const section of validSections) {
         setStepStatus(stepIndex, "active");
         const sectionRes = await AdminAPI.createSection(courseId, {
@@ -267,7 +359,7 @@ export default function NewCoursePage() {
           await AdminAPI.createLesson(sectionId, {
             title: lesson.title,
             description: lesson.description || undefined,
-            duration: Number(lesson.duration) * 60 || 0, // minutes -> seconds
+            duration: Number(lesson.duration) * 60 || 0,
             position: section.lessons.indexOf(lesson) + 1,
           });
           setStepStatus(stepIndex, "done");
@@ -275,10 +367,9 @@ export default function NewCoursePage() {
         }
       }
 
-      router.push(`/admin/courses/${courseId}`);
+      router.push(`/admin/course/${courseId}`);
     } catch (err) {
       setStepStatus(stepIndex, "error");
-
       if (err instanceof AxiosError) {
         setSubmitError(
           err.response?.data?.message ??
@@ -378,12 +469,12 @@ export default function NewCoursePage() {
                 />
               </label>
 
-              <Field
-                label="Thumbnail URL"
-                value={form.thumbnail}
-                onChange={(e) => updateField("thumbnail", e.target.value)}
-                placeholder="https://…"
-              />
+              <label className="block">
+                <span className="mono text-[11px] tracking-widest uppercase block mb-2" style={{ color: "#6B7688" }}>
+                  Thumbnail
+                </span>
+                <ThumbnailUpload value={form.thumbnail} onChange={(url) => updateField("thumbnail", url)} />
+              </label>
 
               <div className="grid sm:grid-cols-3 gap-5">
                 <Field
@@ -524,15 +615,133 @@ export default function NewCoursePage() {
 
           {/* C — Curriculum */}
           <section>
-            <div className="flex items-center gap-3 mb-8">
-              <CellTag>C</CellTag>
-              <h2
-                className="mono text-[11px] tracking-widest uppercase"
-                style={{ color: "var(--ink)" }}
+            <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center gap-3">
+                <CellTag>C</CellTag>
+                <h2
+                  className="mono text-[11px] tracking-widest uppercase"
+                  style={{ color: "var(--ink)" }}
+                >
+                  Curriculum
+                </h2>
+              </div>
+              <button
+                type="button"
+                onClick={() => setBulkOpen((v) => !v)}
+                className="flex items-center gap-2 mono text-[11px] tracking-widest uppercase"
+                style={{ color: "var(--green)" }}
               >
-                Curriculum
-              </h2>
+                <ClipboardPaste size={14} />
+                {bulkOpen ? "Hide paste import" : "Paste curriculum"}
+              </button>
             </div>
+
+            {/* ── Bulk paste import ─────────────────────────────────── */}
+            {bulkOpen && (
+              <div
+                className="border mb-8"
+                style={{ borderColor: "var(--green)" }}
+              >
+                <div
+                  className="px-5 py-4 border-b"
+                  style={{
+                    borderColor: "var(--rule)",
+                    background: "var(--green-tint)",
+                  }}
+                >
+                  <p
+                    className="text-sm font-medium"
+                    style={{ color: "var(--ink)" }}
+                  >
+                    Paste your whole curriculum at once
+                  </p>
+                  <p
+                    className="text-xs mt-1 leading-relaxed"
+                    style={{ color: "#6B7688" }}
+                  >
+                    One section title per line, lessons underneath starting with{" "}
+                    <code>-</code>. Add <code>| minutes</code> after a lesson
+                    title for its duration — leave it off and it defaults to 5.
+                    Nothing is saved yet — this just fills in the form below.
+                  </p>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-0">
+                  <textarea
+                    value={bulkText}
+                    onChange={(e) => setBulkText(e.target.value)}
+                    rows={12}
+                    placeholder={`Getting Started\n- Welcome to the course | 3\n- Setting up TypeScript | 7\n\nTypeScript Fundamentals\n- Types and Type Inference | 10\n- Interfaces and Objects | 9\n- Functions and Generics | 12`}
+                    className="admin-input w-full px-4 py-4 border-0 md:border-r bg-transparent text-sm resize-none"
+                    style={{
+                      borderColor: "var(--rule)",
+                      color: "var(--ink)",
+                      fontFamily: "ui-monospace, Menlo, Consolas, monospace",
+                    }}
+                  />
+
+                  <div className="p-4 max-h-72 overflow-y-auto">
+                    {parsedPreview.length === 0 ? (
+                      <p className="text-xs" style={{ color: "#9AA3B2" }}>
+                        Preview will show up here as you type.
+                      </p>
+                    ) : (
+                      <div className="space-y-4">
+                        {parsedPreview.map((s, si) => (
+                          <div key={si}>
+                            <p
+                              className="mono text-xs"
+                              style={{ color: "var(--gold)" }}
+                            >
+                              {sectionRef(si + 1)} — {s.title}
+                            </p>
+                            <ul className="mt-1 space-y-0.5">
+                              {s.lessons.map((l, li) => (
+                                <li
+                                  key={li}
+                                  className="text-xs flex justify-between"
+                                  style={{ color: "#6B7688" }}
+                                >
+                                  <span>
+                                    {sectionRef(si + 1)}
+                                    {li + 1} · {l.title}
+                                  </span>
+                                  <span className="mono">{l.minutes}m</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div
+                  className="px-5 py-4 border-t flex items-center justify-between"
+                  style={{ borderColor: "var(--rule)" }}
+                >
+                  <span className="text-xs" style={{ color: "#9AA3B2" }}>
+                    {parsedPreview.length} section
+                    {parsedPreview.length === 1 ? "" : "s"},{" "}
+                    {parsedPreview.reduce(
+                      (sum, s) => sum + s.lessons.length,
+                      0,
+                    )}{" "}
+                    lessons detected
+                  </span>
+                  <button
+                    type="button"
+                    onClick={importBulkCurriculum}
+                    disabled={parsedPreview.length === 0}
+                    className="px-6 py-2.5 text-white mono text-xs tracking-widest uppercase disabled:opacity-50"
+                    style={{ backgroundColor: "var(--green)" }}
+                  >
+                    Fill in curriculum
+                  </button>
+                </div>
+              </div>
+            )}
 
             <div className="space-y-8">
               {form.sections.map((section, sIdx) => (
