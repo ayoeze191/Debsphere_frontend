@@ -1,37 +1,42 @@
-import type { LucideIcon } from "lucide-react";
-import { Award, BarChart3, Users } from "lucide-react";
+import { Users, Award, BarChart3 } from "lucide-react";
 
-interface Stat {
-  ref: string;
-  icon: LucideIcon;
-  label: string;
-  value: string;
-  desc: string;
-}
-
-const stats: Stat[] = [
-  { ref: "A1", icon: Users, label: "Community", value: "500+", desc: "active waitlist members" },
-  { ref: "A2", icon: Award, label: "Expertise", value: "12+", desc: "industry mentors" },
-  { ref: "A3", icon: BarChart3, label: "Impact", value: "8+", desc: "data projects launched" },
+const stats = [
+  { icon: Users, value: "500+", label: "Active waitlist members" },
+  { icon: Award, value: "12+", label: "Industry mentors" },
+  { icon: BarChart3, value: "8+", label: "Data projects launched" },
 ];
 
 export default function AboutStats() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 mt-16 border-t border-l" style={{ borderColor: "var(--rule)" }}>
-      {stats.map((stat) => {
-        const Icon = stat.icon;
-        return (
-          <div key={stat.ref} className="row-hover border-b border-r p-6" style={{ borderColor: "var(--rule)" }}>
-            <div className="flex items-center justify-between">
-              <Icon size={20} style={{ color: "var(--green)" }} strokeWidth={1.5} />
-              <span className="mono text-[11px]" style={{ color: "var(--gold)" }}>{stat.ref}</span>
-            </div>
-            <div className="mono text-3xl font-medium mt-5" style={{ color: "var(--ink)" }}>{stat.value}</div>
-            <div className="text-sm font-medium mt-1" style={{ color: "var(--ink)" }}>{stat.label}</div>
-            <div className="text-sm mt-0.5" style={{ color: "#8A93A2" }}>{stat.desc}</div>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-16">
+      {stats.map((stat) => (
+        <div
+          key={stat.label}
+          className="flex items-center gap-3 px-5 py-5 rounded-2xl"
+          style={{
+            background: "white",
+            boxShadow: "0 4px 20px rgba(5,32,115,0.06)",
+          }}
+        >
+          <div
+            className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+            style={{ background: "#E9FBF2" }}
+          >
+            <stat.icon size={20} style={{ color: "#0FAE68" }} strokeWidth={2} />
           </div>
-        );
-      })}
+          <div>
+            <div
+              className="display font-bold text-xl"
+              style={{ color: "#0B1B4B" }}
+            >
+              {stat.value}
+            </div>
+            <div className="text-xs" style={{ color: "#6B7280" }}>
+              {stat.label}
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

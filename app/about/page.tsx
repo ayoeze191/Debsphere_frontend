@@ -1,92 +1,71 @@
 import Link from "next/link";
 import { Target, Sparkles, ArrowRight } from "lucide-react";
-import CellTag from "../components/CellTag";
 import AboutStats from "../components/AboutStats";
 import OfferingsGrid from "../components/OfferingsGrid";
 
 export default function About() {
   return (
-    <div
-      style={{ background: "var(--paper)", color: "var(--ink)" }}
-      className="min-h-screen"
-    >
+    <div style={{ background: "#FAF8F3" }} className="min-h-screen">
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
-        .serif { font-family: 'Fraunces', serif; }
-        .mono { font-family: 'IBM Plex Mono', monospace; }
-        .sans { font-family: 'IBM Plex Sans', sans-serif; }
-       .grid-bg {
-  background-image:
-    linear-gradient(#E8EAF3 1px, transparent 1px),
-    linear-gradient(90deg, #E8EAF3 1px, transparent 1px);
-  background-size: 56px 56px;
-}
-        .row-hover { transition: background-color 0.2s ease; }
-        .row-hover:hover { background-color: var(--green-tint); }
+        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&display=swap');
+        .sans { font-family: 'Inter', sans-serif; }
+        .display { font-family: 'Sora', sans-serif; }
       `}</style>
 
       <div className="sans">
         {/* About Hero */}
-        <section
-          className="relative border-b"
-          style={{ borderColor: "var(--rule)" }}
-        >
-          {/* background layer — pinned behind content, never covers text */}
-          <div className="absolute inset-0 grid-bg opacity-50 pointer-events-none z-0" />
+        <div className="max-w-6xl mx-auto px-6 pt-16 pb-14">
+          <span
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold mb-6"
+            style={{ background: "#E9FBF2", color: "#0FAE68" }}
+          >
+            <Sparkles size={13} /> About Debsphere
+          </span>
+          <h1
+            className="display font-extrabold leading-[1.08] mb-6 max-w-2xl"
+            style={{ fontSize: "44px", color: "#0B1B4B" }}
+          >
+            Where data minds <span style={{ color: "#0FAE68" }}>converge.</span>
+          </h1>
+          <p
+            className="text-lg leading-relaxed max-w-2xl"
+            style={{ color: "#5B6472" }}
+          >
+            Debsphere Academy is a modern online learning platform dedicated to
+            bridging the gap between classroom learning and industry experience.
+            We empower students, graduates, young professionals, career
+            switchers, and aspiring leaders with practical, industry-relevant
+            skills.
+          </p>
 
-          <div className="max-w-6xl mx-auto px-6 py-20 md:py-28 relative z-10">
-            <div className="flex items-center gap-3 mb-6">
-              <CellTag>ABOUT</CellTag>
-              <span
-                className="mono text-[11px] tracking-widest uppercase"
-                style={{ color: "var(--green)" }}
-              >
-                Debsphere Academy
-              </span>
-            </div>
-            <h1 className="serif text-5xl md:text-7xl font-semibold leading-[1.05] max-w-3xl">
-              Where data minds
-              <br />
-              <span style={{ color: "var(--green)" }}>converge.</span>
-            </h1>
-            <p
-              className="mt-6 text-lg max-w-2xl leading-relaxed"
-              style={{ color: "#4B5768" }}
-            >
-              Debsphere Academy is a modern online learning platform dedicated
-              to bridging the gap between classroom learning and industry
-              experience. We empower students, graduates, young professionals,
-              career switchers, and aspiring leaders with practical,
-              industry-relevant skills.
-            </p>
-
-            {/* Stats */}
-            <AboutStats />
-          </div>
-        </section>
+          <AboutStats />
+        </div>
 
         {/* Our Story / Vision */}
-        <section
-          className="max-w-6xl mx-auto px-6 py-20 border-b"
-          style={{ borderColor: "var(--rule)" }}
-        >
-          <div className="grid md:grid-cols-2 gap-16">
-            <div>
-              <div className="flex items-center gap-3 mb-6">
-                <CellTag>B1</CellTag>
-                <span
-                  className="mono text-[11px] tracking-widest uppercase"
-                  style={{ color: "var(--green)" }}
-                >
-                  Our Story
-                </span>
-              </div>
-              <h2 className="serif text-3xl font-semibold">
+        <div className="max-w-6xl mx-auto px-6 py-16">
+          <div className="grid md:grid-cols-2 gap-8">
+            <div
+              className="rounded-3xl p-8"
+              style={{
+                background: "white",
+                boxShadow: "0 4px 24px rgba(5,32,115,0.06)",
+              }}
+            >
+              <span
+                className="text-xs font-bold tracking-widest uppercase"
+                style={{ color: "#0FAE68" }}
+              >
+                Our story
+              </span>
+              <h2
+                className="display font-bold text-2xl mt-2 mb-4"
+                style={{ color: "#0B1B4B" }}
+              >
                 Born from a simple desire to help.
               </h2>
               <div
-                className="mt-5 space-y-4 leading-relaxed"
-                style={{ color: "#4B5768" }}
+                className="space-y-4 leading-relaxed text-sm"
+                style={{ color: "#3F4756" }}
               >
                 <p>
                   The journey began when a friend asked to be taught how to use
@@ -109,126 +88,142 @@ export default function About() {
                 </p>
               </div>
               <div
-                className="mt-6 pt-4 border-t"
-                style={{ borderColor: "var(--rule)" }}
+                className="mt-6 pt-5"
+                style={{ borderTop: "1px solid rgba(11,27,75,0.08)" }}
               >
-                <p className="text-sm mono" style={{ color: "var(--ink)" }}>
+                <p
+                  className="text-sm font-semibold"
+                  style={{ color: "#0B1B4B" }}
+                >
                   Deborah Olabode
                 </p>
-                <p className="text-xs mt-0.5" style={{ color: "#8A93A2" }}>
+                <p className="text-xs mt-0.5" style={{ color: "#9CA3AF" }}>
                   Founder &amp; Executive Director, Debsphere Academy
                 </p>
               </div>
             </div>
 
-            <div>
-              <div className="flex items-center gap-3 mb-6">
-                <CellTag>B2</CellTag>
-                <span
-                  className="mono text-[11px] tracking-widest uppercase"
-                  style={{ color: "var(--green)" }}
-                >
-                  Our Vision
-                </span>
-              </div>
-              <h2 className="serif text-3xl font-semibold">
+            <div
+              className="rounded-3xl p-8"
+              style={{
+                background: "white",
+                boxShadow: "0 4px 24px rgba(5,32,115,0.06)",
+              }}
+            >
+              <span
+                className="text-xs font-bold tracking-widest uppercase"
+                style={{ color: "#0FAE68" }}
+              >
+                Our vision
+              </span>
+              <h2
+                className="display font-bold text-2xl mt-2 mb-4"
+                style={{ color: "#0B1B4B" }}
+              >
                 Bridging the gap.
               </h2>
-              <p className="mt-5 leading-relaxed" style={{ color: "#4B5768" }}>
+              <p
+                className="leading-relaxed text-sm mb-4"
+                style={{ color: "#3F4756" }}
+              >
                 To bridge the gap between classroom learning and industry
                 experience by equipping individuals with practical,
                 industry-relevant skills, real-world exposure, and career
                 opportunities that prepare them to excel in the global
                 workforce.
               </p>
-              <p className="mt-4 leading-relaxed" style={{ color: "#4B5768" }}>
+              <p
+                className="leading-relaxed text-sm mb-6"
+                style={{ color: "#3F4756" }}
+              >
                 We envision a world where education goes beyond theory — where
                 learning is applied, innovation is nurtured, and every learner
                 graduates with the confidence, competence, and experience needed
                 to thrive.
               </p>
               <div
-                className="mt-8 flex items-center gap-4 border p-5"
-                style={{
-                  borderColor: "var(--rule)",
-                  background: "var(--green-tint)",
-                }}
+                className="flex items-center gap-4 rounded-2xl p-5"
+                style={{ background: "#F5F9F7" }}
               >
-                <Target
-                  size={22}
-                  style={{ color: "var(--green)" }}
-                  strokeWidth={1.5}
-                />
+                <div
+                  className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+                  style={{ background: "#E9FBF2" }}
+                >
+                  <Target
+                    size={20}
+                    style={{ color: "#0FAE68" }}
+                    strokeWidth={2}
+                  />
+                </div>
                 <div>
                   <div
-                    className="font-medium text-sm"
-                    style={{ color: "var(--ink)" }}
+                    className="font-semibold text-sm"
+                    style={{ color: "#0B1B4B" }}
                   >
                     Mission-driven
                   </div>
-                  <div className="text-sm mt-0.5" style={{ color: "#6B7688" }}>
+                  <div className="text-sm mt-0.5" style={{ color: "#6B7280" }}>
                     Practical skills for real-world impact
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </section>
+        </div>
 
         {/* What We Offer */}
-        <section
-          className="max-w-6xl mx-auto px-6 py-20 border-b"
-          style={{ borderColor: "var(--rule)" }}
-        >
-          <div className="flex items-center gap-3 mb-3">
-            <CellTag>C</CellTag>
-            <span
-              className="mono text-[11px] tracking-widest uppercase"
-              style={{ color: "var(--green)" }}
-            >
-              What we offer
-            </span>
-          </div>
-          <h2 className="serif text-3xl md:text-4xl font-semibold mb-12">
-            Built for <span style={{ color: "var(--green)" }}>excellence</span>
+        <div className="max-w-6xl mx-auto px-6 py-16">
+          <span
+            className="text-xs font-bold tracking-widest uppercase"
+            style={{ color: "#0FAE68" }}
+          >
+            What we offer
+          </span>
+          <h2
+            className="display font-bold text-3xl mt-2 mb-10"
+            style={{ color: "#0B1B4B" }}
+          >
+            Built for excellence.
           </h2>
-
           <OfferingsGrid />
-        </section>
+        </div>
 
         {/* CTA */}
-        <section className="max-w-6xl mx-auto px-6 py-20">
+        <div className="max-w-6xl mx-auto px-6 py-16">
           <div
-            className="border p-12 md:p-16 text-center"
-            style={{ borderColor: "var(--rule)" }}
+            className="rounded-[32px] p-12 md:p-16 text-center"
+            style={{ background: "#0B1B4B" }}
           >
             <Sparkles
               size={26}
-              style={{ color: "var(--green)" }}
+              style={{ color: "#1AE184" }}
               className="mx-auto mb-5"
-              strokeWidth={1.5}
+              strokeWidth={2}
             />
-            <h2 className="serif text-3xl md:text-4xl font-semibold">
+            <h2 className="display font-bold text-3xl md:text-4xl text-white">
               Ready to shape your future with data?
             </h2>
-            <p className="mt-3 max-w-xl mx-auto" style={{ color: "#6B7688" }}>
-              Join the waitlist and be the first to access our programs,
-              community, and resources.
+            <p
+              className="mt-3 max-w-xl mx-auto"
+              style={{ color: "rgba(255,255,255,0.7)" }}
+            >
+              Browse our programs and start building practical, real-world
+              skills today.
             </p>
             <Link
-              href="/"
-              className="inline-flex items-center gap-2 mt-8 px-8 py-3.5 text-white mono text-xs tracking-widest uppercase transition-opacity hover:opacity-90"
-              style={{ backgroundColor: "var(--green)" }}
+              href="/courses"
+              className="inline-flex items-center gap-2 mt-8 px-8 py-4 rounded-full text-sm font-semibold text-white transition-opacity hover:opacity-90"
+              style={{ background: "#0FAE68" }}
             >
-              Join the waitlist <ArrowRight size={16} strokeWidth={1.5} />
+              Browse courses <ArrowRight size={16} />
             </Link>
           </div>
-        </section>
+        </div>
 
         {/* Footer */}
         <footer
-          className="max-w-6xl mx-auto px-6 py-8 text-center mono text-xs"
-          style={{ color: "#8A93A2" }}
+          className="max-w-6xl mx-auto px-6 py-8 text-center text-xs"
+          style={{ color: "#9CA3AF" }}
         >
           © 2026 Debsphere Academy — data science, redefined.
         </footer>
